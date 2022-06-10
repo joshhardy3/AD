@@ -2,7 +2,7 @@
 
 $Username = Read-Host -Prompt "Enter username of mover"
 $Title = Read-Host -Prompt "Enter new job title"
-$OU = "OU=Email in O365,OU=SelwoodUsers,OU=FLIP,DC=selwoodhousing,DC=local"
+$OU = "DC"
 $Manager = Read-Host -Prompt "Enter Managers Username"
 
 IF (@(Get-ADUser -Filter * -Properties title, department -SearchBase $OU -SearchScope Subtree | where {$_.title -eq $Title}).Count -gt 0 -and (@(Get-ADUser -Filter * -Properties title, department -SearchBase $OU -SearchScope Subtree | where {$_.title -eq $Title}).Count -le 7) ){
