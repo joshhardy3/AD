@@ -2,7 +2,7 @@
 UPDATE NOTES:
 
 08/06/2022:
-    Removed need to manually add file path of restore doc, will auto search ADDC for file name
+    Removed need to manually add file path of restore doc, will auto search for file name
     Imports 2 docs, one for memberof and one for AD Details
     Removed Auto reply
     Converts mailbox to normal from shared
@@ -19,8 +19,8 @@ $Name = Read-Host -Prompt "Enter Username"
 $Username = Get-ADUser -Identity $Name
 
 
-$ADDetails = "\\vs-addc-l-01\SCRIPTS\Scriptdocs\AD_Memberof_Backup\" + $Name + "ADDetails.csv"
-$NewGroups = "\\vs-addc-l-01\SCRIPTS\Scriptdocs\AD_Memberof_Backup\" + $Name + "MemberOf.csv"
+$ADDetails = "File Path from leaver script" + $Name + "ADDetails.csv"
+$NewGroups = "File Path from leaver script" + $Name + "MemberOf.csv"
 
 $Details = Import-Csv -Path $ADDetails
 
@@ -38,9 +38,9 @@ Catch{
     }
 
 Try{
-    Get-ADUser -Identity $Name | Set-ADUser -Description $Details.Title -Manager $Details.Manager -Title $Details.Title -Department $Details.Department -Company "Selwood Housing" -Enabled $true
+    Get-ADUser -Identity $Name | Set-ADUser -Description $Details.Title -Manager $Details.Manager -Title $Details.Title -Department $Details.Department -Company "" -Enabled $true
     
-    Get-ADUser -Identity $Name | Set-ADUser -Add @{ physicalDeliveryOfficeName = "Bryer Ash"}
+    Get-ADUser -Identity $Name | Set-ADUser -Add @{ physicalDeliveryOfficeName = ""}
     Write-Host "Restored AD Details" -ForegroundColor Cyan
     }
 
