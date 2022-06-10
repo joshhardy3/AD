@@ -17,7 +17,7 @@ UPDATE NOTES:
     Disable Email Address Policy in order to set Primary SMTP
 
 08/06/2022:
-    Added variable to ask if 1st touch is required, if yes, added template email to Kasia to clipboard to paste and send
+    Added variable to ask if 1st touch is required, if yes, added template email to DRS manager to clipboard to paste and send
     Updated so if more than 1 person has job title, will ask for Equiv manually, so's not to confuse departments, until I can add the below
 
 09/06/2022:
