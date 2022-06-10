@@ -18,18 +18,18 @@ $FirstName = Read-Host -Prompt "Enter the Leavers First Name"
 $Surname = Read-Host -Prompt "Enter the Leavers Surname"
 $AcctoMbox = Read-Host -Prompt "Does anyone require access to the Leavers mailbox? If so, enter their Name, if not leave blank"
 $UserName = $FirstName + "." + $Surname
-$Email = $UserName + "@Selwoodhousing.com"
+$Email = $UserName + "@Domain.com"
 $Date = Get-Date -Format "dd/MM/yyyy"
 $Description = "Leaver - " + $Date
-$UPN = $UserName + "@Selwoodhousing.com"
+$UPN = $UserName + "@Domain.com"
 $Name = $FirstName + " " + $Surname
-$AutoReply = "Thank you for your email, however " + $Name + " no longer works for Selwood Housing Group. Please call 01225 715 715 and a member of our Customer Service team will be able to provide you with information on where to send the information too."
+$AutoReply = "Thank you for your email, however " + $Name + " no longer works for "". Please call "" and a member of our Customer Service team will be able to provide you with information on where to send the information too."
 $adminusername = Get-Content "C:\Temp\Email.txt"
 $pass = Get-Content "C:\Temp\pword.txt" | ConvertTo-SecureString
 $Creds = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $adminusername, $pass
 $Date2 = Get-Date -Format "dd.MM.yyyy"
-$BCKPath = "\\vs-addc-l-01\SCRIPTS\Scriptdocs\AD_Memberof_Backup\" + $UserName + "MemberOf.csv"
-$LogFile = "\\vs-addc-l-01\SCRIPTS\Scriptdocs\AD_Memberof_Backup\" + $username + "ADDetails.csv"
+$BCKPath = "FilePath" + $UserName + "MemberOf.csv"
+$LogFile = "FilePath" + $username + "ADDetails.csv"
 
 
 
@@ -168,7 +168,7 @@ Function MovetoLeavers{
 
     Try{ 
     
-    Get-ADUser -Identity $UserName | Move-ADObject -TargetPath "OU=Leavers,OU=SelwoodHousing,DC=selwoodhousing,DC=local" -Confirm:$false
+    Get-ADUser -Identity $UserName | Move-ADObject -TargetPath "Leaver OU" -Confirm:$false
     Write-host "Moved $Firstname $Surname To Leavers OU" -ForegroundColor Cyan
     }
 
@@ -184,4 +184,4 @@ ConnectExo
 AddAutoReplyandConvert
 MBoxAccess
 MovetoLeavers
-Write-Host "Leaver process complete, please amend OneDrive access if needed, remove Skype number and disable QL account" -ForegroundColor Green
+Write-Host "Leaver process complete, please amend OneDrive access if needed -ForegroundColor Green
