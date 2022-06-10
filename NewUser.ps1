@@ -17,13 +17,15 @@ UPDATE NOTES:
     Disable Email Address Policy in order to set Primary SMTP
 
 08/06/2022:
-    Added variable to ask if 1st touch is required, if yes, added template email to DRS manager to clipboard to paste and send
+    Added variable to ask if 1st touch is required, if yes, added template email to DRS manager to clipboard to paste and send Rather than sending email from
+    PowerShell, which is no longer supported and not secure
     Updated so if more than 1 person has job title, will ask for Equiv manually, so's not to confuse departments, until I can add the below
 
 09/06/2022:
     Added Progress bar to AD sync rather than the blind 60 second pause
     Updated Equiv search so if there is more than 1 department within users with that Title, it will prompt for manual input, if
     users have the same department, it will select first one
+    
 #>
 
 
