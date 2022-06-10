@@ -40,23 +40,21 @@ $Manager = Read-Host -Prompt "Enter Managers Username"
 
 #Variables
 $UserName = $FirstName + "." + $Surname
-$Email = $UserName + "@Selwoodhousing.com"
+$Email = $UserName + "@Domain.com"
 $FullName = $FirstName + " " + $Surname
-$Path = "OU=Email in O365,OU=SelwoodUsers,OU=FLIP,DC=selwoodhousing,DC=local"
-$AccPass = (ConvertTo-SecureString "P@ssw0rd" -AsPlainText -force)
-#($Password | Get-Random -count 8) -join ''
-$Company = "Selwood Housing"
-$OU = "OU=Email in O365,OU=SelwoodUsers,OU=FLIP,DC=selwoodhousing,DC=local"
-$DC = "vs-exch-l-01.selwoodhousing.local"
-$DC1 = "vs-addc-l-01.selwoodhousing.local"
-$Prox = $UserName + "@selwoodhousinggroup.mail.onmicrosoft.com"
+$Path = "OU=OUT,OU=OU,OU=OU,DC=Domain,DC=local"
+$Company = "Company"
+$OU = "OU=OUT,OU=OU,OU=OU,DC=Domain,DC=local"
+$DC = "Domain controller"
+$DC1 = "Domain Controller 1"
+$Prox = $UserName + "@domain.mail.onmicrosoft.com"
 $adminusername = Get-Content "C:\Temp\email.txt"
 $Adminpass = Get-Content "C:\Temp\pword.txt" | ConvertTo-SecureString
 $Cred = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $adminusername, $Adminpass
 $Prim = "SMTP:" + $Email
-$RRA = $Initial +"." + $Surname + "@selwoodhousinggroup.mail.onmicrosoft.com"
-$RRA1 = $UserName + "@selwoodhousinggroup.mail.onmicrosoft.com"
-$SMTP1 = $Initial +"." + $Surname + "@selwoodhousinggroup.com"
+$RRA = $Initial +"." + $Surname + "@domain.mail.onmicrosoft.com"
+$RRA1 = $UserName + "@domain.mail.onmicrosoft.com"
+$SMTP1 = $Initial +"." + $Surname + "@domain.com"
 $1stTouch = Read-Host -Prompt "Does this user require 1st Touch? (Yes or No)"
 
 #Generate Pword - https://community.spiceworks.com/topic/2130057-generate-random-password
@@ -103,18 +101,18 @@ Catch{
     Write-Host "Unable to find Equivalent User"
     }
 
-#Connecting to VS-EXCH-L-01
-Write-Host "Attempting connection to VS-EXCH-L-01" -ForegroundColor Cyan
+#Connecting to Exchange Server
+Write-Host "Attempting connection to Exchange Server" -ForegroundColor Cyan
 Try{
     
-    $Session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri http://vs-exch-L-01.selwoodhousing.local/PowerShell/ -Authentication Kerberos -Credential $Cred
+    $Session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri http://"ExchangeServer.domain".local/PowerShell/ -Authentication Kerberos -Credential $Cred
     Import-PSSession $Session -DisableNameChecking -AllowClobber
-    Write-Host "Successfulyl connected PowerShell to VS-EXCH-L-01" -ForegroundColor Cyan
+    Write-Host "Successfulyl connected PowerShell to Exchange Server" -ForegroundColor Cyan
     }
 
 Catch{
     
-    Write-Host "Failed to connect to VS-EXCH-L-01" -ForegroundColor Red
+    Write-Host "Failed to connect to Exchange Server" -ForegroundColor Red
     }
 
 
@@ -158,7 +156,7 @@ Remove-PSSession $Session
 
 #AD Sync - https://wragg.io/using-write-progress-to-provide-feedback-in-powershell/
 Try{
-    Invoke-Command -ComputerName vs-azac-l-01 -ScriptBlock {Start-ADSYNCSYNCCYCLE}
+    Invoke-Command -ComputerName "AAD Sync Server" -ScriptBlock {Start-ADSYNCSYNCCYCLE}
     For ($i=60; $i -gt 1; $i–-) {
     Write-Progress -Activity "Running AD Sync" -SecondsRemaining $i
     Start-Sleep 1
@@ -182,7 +180,7 @@ Try{
     -Office $Office `
     -Company $Company `
     -Enabled $true `
-    -Server "VS-ADDC-L-01"
+    -Server "Domain Controller"
         start-sleep -Seconds 10
 
     Get-ADUser -Identity $Equiv -Properties memberof | Select-Object -ExpandProperty Memberof | Add-ADGroupMember -Members $UserName
@@ -235,7 +233,7 @@ Catch{
     
 $EmailDepart = Get-ADUser -Identity $UserName -Properties Department | Select-Object Department -ExpandProperty Department
 
-$EmailtoKasia = "Hi Kasia,
+$EmailtoDRSManager = "Hi "",
  
 I’m currently processing this new starter and they require setup in DRS before I can setup their 1st Touch:
  
@@ -253,8 +251,8 @@ Kind regards,
 
 If(
     $1stTouch -eq "Yes"){
-        Set-Clipboard -Value $EmailtoKasia
-        Write-host "Please paste clipboard in an email to Kasia"
+        Set-Clipboard -Value $EmailtoDRSManager
+        Write-host "Please paste clipboard in an email to the DRS Manager"
         }
 Else{}
 
@@ -262,4 +260,4 @@ Set-ADAccountPassword -Identity $UserName -NewPassword $SecPw
 
 
 #Finished
-Write-host "The account $FullName Has been created with the password $Newpas, enable skype account and set up QL" -ForegroundColor Green
+Write-host "The account $FullName Has been created with the password $Newpas" -ForegroundColor Green
